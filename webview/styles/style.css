@@ -10,6 +10,10 @@ body {
     padding: 15px;
 }
 
+.btn {
+    color: white;
+}
+
 .group {
     padding: 15px;
     margin: 15px;
@@ -18,8 +22,7 @@ body {
 
 .selections {
     padding: 15px;
-    background-color: white;
-    margin: 15px
+    /* margin: 15px */
 }
 
 .regexGroupArea {
@@ -31,4 +34,8 @@ body {
 .dragging {
     background-color: green;
     opacity: 0.5;
+}
+
+.dropped {
+    color: black;
 }

@@ -26,6 +26,7 @@ const dragStart = (e) => {
 
 const dragEnd = (e) => {
     e.target.classList.remove("dragging");
+    e.target.classList.add("dropped");
     $(".selections").html("");
     makeSelections();
 }
