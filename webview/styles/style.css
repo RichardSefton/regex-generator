@@ -1,0 +1,28 @@
+body, html {
+    background-color: rgb(77, 77, 77);
+}
+
+body {
+    padding: 25px;
+}
+
+.regexGroup {
+    padding: 15px;
+}
+
+.selections {
+    padding: 15px;
+    background-color: white;
+    margin: 15px
+}
+
+.regexGroupArea {
+    background-color: white;
+    width: 100%;
+    min-height: 250px;
+}
+
+.dragging {
+    background-color: green;
+    opacity: 0.5;
+}
