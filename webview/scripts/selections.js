@@ -3,6 +3,7 @@ const makeSelections = () => {
     const word = new SelectionType("word", "\w", "word");
     const whitespace = new SelectionType("whitespace", "\s", "whitespace");
 
+    $(".selections").html("");
     $(".selections").append(digit.makeCharacter());
     $(".selections").append(word.makeCharacter());
     $(".selections").append(whitespace.makeCharacter());
@@ -29,20 +30,17 @@ const dragEnd = (e) => {
     makeSelections();
 }
 
-const dragging = (e) => {
-}
-
 const dragOver = (e, area) => {
     e.preventDefault();
     const selection = document.querySelector(".dragging");
     const classList = [...e.target.classList];
     if (classList.includes("regexGroupArea")) {
-        area.appendChild(selection);
+        area.append(selection);
     } else {
         // console.log(area);
         const afterElement = dragPlacement(area, e.clientX, e.clientY);
         if (afterElement === undefined) {
-            area.appendChild(selection);
+            area.append(selection);
         } else {
             area.insertBefore(selection, afterElement);
         }
@@ -53,15 +51,16 @@ const dragPlacement = (area, x, y) => {
     const draggableElements = [...area.querySelectorAll('[draggable]:not(.dragging)')];
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
-        console.log(box);
         const yOffset = y - box.top - box.height /2;
-        // const xOffset = x + 
-        if ((yOffset < 0 && yOffset > closest.yOffset)) {
-            return {offset: yOffset, element: child}
+        const xOffset = x - box.left - box.width /2;
+        //  
+        if ((yOffset < 0 && yOffset > closest.yOffset) && (xOffset < 0 && xOffset > closest.xOffset)) {
+            console.log(child);
+            return {yOffset: yOffset, xOffset: xOffset, element: child}
         } else {
             return closest;
         }
-    }, {yOffset: Number.NEGATIVE_INFINITY, xOffset: Number.POSITIVE_INFINITY}).element;
+    }, {yOffset: Number.NEGATIVE_INFINITY, xOffset: Number.NEGATIVE_INFINITY}).element;
 }
 
 const setEventListeners = (selections, areas) => {
@@ -71,9 +70,6 @@ const setEventListeners = (selections, areas) => {
         });
         selection.selection.addEventListener("dragend", (e) => {
             dragEnd(e);
-        });
-        selection.selection.addEventListener("drag", (e) => {
-            dragging(e);
         });
     });
 

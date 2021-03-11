@@ -1,18 +1,27 @@
-<div class="container">
+<div class="container" id="mainContainer">
     <div class="input-group">
         <input type="text" class="form-control" id="regexOut" value="//g">
     </div>
-    <!-- <button class="btn-primary btn" id="global-modifier">Global</button>
-    <button class="btn-primary btn" id="whole-string">Global</button> -->
 
-    <div id="selections" class="selections"></div>
+    <button class="btn-primary btn" onclick="addGroup()">Add group</button>
 
-    <div id="regexGroup" class="regexGroup"></div>
+    <!-- <div id="initial" class="group">
+        
+    </div> -->
 
     <script>
         $(() => {
-            makeGroup();
+            const newGroupContainer = makeContainer();
+            makeGroup(newGroupContainer);
+            insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer);
             makeSelections();
         });
+
+        const addGroup = () => {
+            const newGroupContainer = makeContainer();
+            makeGroup(newGroupContainer);
+            insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer);
+            makeSelections();
+        };
     </script>
 </div>
