@@ -1,25 +1,33 @@
-const makeGroupContainer = () => {
-    const group = document.createElement("div");
-    group.className = "regexGroupArea";
-    return group
-}
-
-const makeContainer = () => {
+const makeGroupContainer = (index) => {
     const newGroupContainer = document.createElement("div");
     newGroupContainer.className = "group";
-    newGroupContainer.appendChild(selectionsMaker());
+    newGroupContainer.setAttribute("index", `${index}`);
+    newGroupContainer.append(makeSelectionsContainer(index));
+    newGroupContainer.append(makeRegexGroupAreaContainer(index));
+    newGroupContainer.append(makeOptionsContianer(index));
     return newGroupContainer;
 }
 
-const selectionsMaker = () => {
-    const selections = document.createElement("div");
-    selections.className = "selections";
-    return selections;
+const makeSelectionsContainer = (index) => {
+    const container = document.createElement("div");
+    container.className = "selections";
+    container.setAttribute("index", `${index}`);
+    return container;
 }
 
-const makeGroup = (element) => {
-    element.appendChild(makeGroupContainer());
+const makeRegexGroupAreaContainer = (index) => {
+    const container = document.createElement("div");
+    container.className = "regexGroupArea";
+    container.setAttribute("index", `${index}`)
+    return container;
 }
+
+const makeOptionsContianer = (index) => {
+    const container = document.createElement("div");
+    container.classList.add("options");
+    container.setAttribute("index", `${index}`);
+    return container
+};
 
 const insertNewGroupContainer = (insertPoint, newElement) => {
     insertPoint.append(newElement);

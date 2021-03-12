@@ -37,11 +37,14 @@ function activate(context) {
 			const selectionsSrc = panel.webview.asWebviewUri(selectionsDisk);
 			const selectionTypeDisk = vscode.Uri.file(path.join(context.extensionPath, "webview", "scripts", "SelectionType.js"));
 			const selectionTypeSrc = panel.webview.asWebviewUri(selectionTypeDisk);
+			const generatorDisk = vscode.Uri.file(path.join(context.extensionPath, "webview", "scripts", "generator.js"));
+			const generatorSrc = panel.webview.asWebviewUri(generatorDisk);
 			const scripts = [
 				groupCreatorSrc,
 				regexModifiersSrc,
 				selectionsSrc,
-				selectionTypeSrc
+				selectionTypeSrc,
+				generatorSrc
 			]
 			panel.webview.html = getWebviewContent(cssSrc, scripts, htmlContent);
 		})
@@ -78,6 +81,7 @@ function getWebviewContent(cssSrc, scripts, htmlContent) {
 					<script src="${scripts[1]}"></script>
 					<script src="${scripts[2]}"></script>
 					<script src="${scripts[3]}"></script>
+					<script src="${scripts[4]}"></script>
 				</head>
 				<body>
 					${htmlContent}

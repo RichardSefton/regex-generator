@@ -14,6 +14,10 @@ body {
     color: white;
 }
 
+.lbl-white {
+    color: white;
+}
+
 .group {
     padding: 15px;
     margin: 15px;
@@ -23,6 +27,10 @@ body {
 .selections {
     padding: 15px;
     /* margin: 15px */
+}
+
+.options {
+    padding: 15px;
 }
 
 .regexGroupArea {

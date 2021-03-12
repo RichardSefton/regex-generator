@@ -5,23 +5,29 @@
 
     <button class="btn-primary btn" onclick="addGroup()">Add group</button>
 
-    <!-- <div id="initial" class="group">
-        
-    </div> -->
-
     <script>
+        let index = 0;
+        const vscode = acquireVsCodeApi();
         $(() => {
-            const newGroupContainer = makeContainer();
-            makeGroup(newGroupContainer);
-            insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer);
-            makeSelections();
+            state();
+            const newGroupContainer = makeGroupContainer(index);
+            insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer)
+            makeSelections(index);
+            newGroup();
+            index++;
         });
 
         const addGroup = () => {
-            const newGroupContainer = makeContainer();
-            makeGroup(newGroupContainer);
+            state();
+            const newGroupContainer = makeGroupContainer(index);
             insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer);
-            makeSelections();
+            makeSelections(index);
+            newGroup();
+            index++;
+        };
+
+        const state = () => {
+            vscode.setState({...vscode.getState()})[`beginString_${index}`] = false;
         };
     </script>
 </div>

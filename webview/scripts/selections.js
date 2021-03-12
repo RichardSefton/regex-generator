@@ -1,34 +1,49 @@
-const makeSelections = () => {
-    const digit = new SelectionType("digits", "\d", "digits");
-    const word = new SelectionType("word", "\w", "word");
-    const whitespace = new SelectionType("whitespace", "\s", "whitespace");
+// @ts-nocheck
+const makeSelections = (index) => {
+    const digit = new SelectionType(index, "\\d", "digits");
+    const word = new SelectionType(index, "\\w", "word");
+    const whitespace = new SelectionType(index, "\\s", "whitespace");
 
     $(".selections").html("");
-    $(".selections").append(digit.makeCharacter());
-    $(".selections").append(word.makeCharacter());
-    $(".selections").append(whitespace.makeCharacter());
+    $(".selections").append(digit.makeDraggable());
+    $(".selections").append(word.makeDraggable());
+    $(".selections").append(whitespace.makeDraggable());
+    
+
+    const beginString = new SelectionType(index, "^", "beginString", "Begin String").makeToggle(vscode);
+    $(".options").html("");
+    $(".options").append(beginString);
+
+    const toggles = [
+        beginString
+    ]
 
     const selections = [
         digit, 
         word,
         whitespace,
     ]
+
     const areas = document.querySelectorAll(".regexGroupArea");
 
-    setEventListeners(selections, areas)
+    setEventListeners(selections, areas, toggles, index)
 }
 
 const dragStart = (e) => {
-    console.log("started dragging");
     e.target.classList.add("dragging");
     e.target = document.querySelector('.dragging');
 }
 
-const dragEnd = (e) => {
+const dragEnd = (e, index) => {
     e.target.classList.remove("dragging");
     e.target.classList.add("dropped");
-    $(".selections").html("");
-    makeSelections();
+    const groupAreas = [...document.querySelectorAll(".regexGroupArea")];
+    const area = groupAreas.filter(ga => ga.getAttribute("index") === `${index}`);
+    if (area.length === 1) {
+        $(".selections").html("");
+        updateGroup(area[0], index);
+    }
+    makeSelections(index);
 }
 
 const dragOver = (e, area) => {
@@ -48,15 +63,22 @@ const dragOver = (e, area) => {
     }
 }
 
+const toggleChange = (e, index) => {
+    vscode.setState({...vscode.getState()})[`beginString_${index}`] = e.target.checked;
+    const groupAreas = [...document.querySelectorAll(".regexGroupArea")];
+    const area = groupAreas.filter(ga => ga.getAttribute("index") === `${index}`);
+    if (area.length === 1) {
+        updateGroup(area[0], index);
+    }
+}
+
 const dragPlacement = (area, x, y) => {
     const draggableElements = [...area.querySelectorAll('[draggable]:not(.dragging)')];
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
         const yOffset = y - box.top - box.height /2;
         const xOffset = x - box.left - box.width /2;
-        //  
         if ((yOffset < 0 && yOffset > closest.yOffset) && (xOffset < 0 && xOffset > closest.xOffset)) {
-            console.log(child);
             return {yOffset: yOffset, xOffset: xOffset, element: child}
         } else {
             return closest;
@@ -64,19 +86,26 @@ const dragPlacement = (area, x, y) => {
     }, {yOffset: Number.NEGATIVE_INFINITY, xOffset: Number.NEGATIVE_INFINITY}).element;
 }
 
-const setEventListeners = (selections, areas) => {
+
+const setEventListeners = (selections, areas, toggles, index) => {
     selections.forEach((selection) => {
         selection.selection.addEventListener("dragstart", (e) => {
             dragStart(e);
         });
         selection.selection.addEventListener("dragend", (e) => {
-            dragEnd(e);
+            dragEnd(e, index);
         });
     });
 
     areas.forEach((area) => {
         area.addEventListener("dragover", (e) => {
             dragOver(e, area);
+        });
+    });
+
+    toggles.forEach((toggle) => {
+        toggle.addEventListener("change", (e) => {
+            toggleChange(e, index);
         })
     })
 }
