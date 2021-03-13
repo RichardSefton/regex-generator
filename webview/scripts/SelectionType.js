@@ -22,6 +22,47 @@ class SelectionType {
         return this.selection;
     }
 
+    makeCustomRange() {
+        this.selection = document.createElement("div");
+        this.selection.setAttribute("draggable", "true");
+        this.selection.classList.add("customRange");
+        this.selection.classList.add("input-group");
+        this.selection.classList.add("btn");
+        this.selection.classList.add("col-6");
+        this.selection.setAttribute("modifierNumber", 0);
+        this.selection.setAttribute("modifierValue", "");
+        this.selection.setAttribute("name", this.name);
+        this.selection.setAttribute("index", `${this.index}`)
+        const customRangePrepend = document.createElement("div");
+        customRangePrepend.classList.add("input-group-prepend");
+        const customRangePrependSpan = document.createElement("span");
+        customRangePrependSpan.setAttribute("name", `${this.name}`);
+        customRangePrependSpan.setAttribute("index", `${this.index}`);
+        customRangePrependSpan.classList.add("input-group-text");
+        customRangePrependSpan.innerHTML = "[";
+        customRangePrepend.append(customRangePrependSpan);
+        this.selection.append(customRangePrepend);
+        const customRangeInput = document.createElement("input");
+        customRangeInput.classList.add("form-control");
+        customRangeInput.classList.add("input-sm");
+        customRangeInput.classList.add("customRangeInput");
+        customRangeInput.setAttribute("type", "text");
+        customRangeInput.setAttribute("name", `${this.name}`);
+        customRangeInput.setAttribute("index", `${this.index}`)
+        this.selection.append(customRangeInput)
+        const customRangeAppend = document.createElement("div");
+        customRangeAppend.classList.add("input-group-append");
+        const customRangeAppendSpan = document.createElement("span");
+        customRangeAppendSpan.setAttribute("name", `${this.name}`);
+        customRangeAppendSpan.setAttribute("index", `${this.index}`);
+        customRangeAppendSpan.setAttribute("append", true);
+        customRangeAppendSpan.classList.add("input-group-text");
+        customRangeAppendSpan.innerHTML += " ]";
+        customRangeAppend.append(customRangeAppendSpan);
+        this.selection.append(customRangeAppend);
+        return this.selection;
+    }
+
     makeToggle() {
         this.checkboxWrapper = document.createElement("div");
         this.checkboxWrapper.classList.add("form-group");

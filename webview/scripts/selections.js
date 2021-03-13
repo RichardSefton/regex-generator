@@ -6,7 +6,8 @@ const makeSelections = (index) => {
     const whitespace = new SelectionType(index, "\\s", "whitespace");
     const notDigit = new SelectionType(index, "\\D", "not digit");
     const notWord = new SelectionType(index, "\\W", "not word");
-    const notWhitespace = new SelectionType(index, "\\S", "not whitespace")
+    const notWhitespace = new SelectionType(index, "\\S", "not whitespace");
+    const customRange = new SelectionType(index, "", "range");
 
     $(`.selections[index=${index}]`).html("");
     $(`.selections[index=${index}]`).append(wildcard.makeDraggable());
@@ -16,7 +17,7 @@ const makeSelections = (index) => {
     $(`.selections[index=${index}]`).append(notDigit.makeDraggable());
     $(`.selections[index=${index}]`).append(notWord.makeDraggable());
     $(`.selections[index=${index}]`).append(notWhitespace.makeDraggable());
-
+    $(`.selections[index=${index}]`).append(customRange.makeCustomRange());
 
     
     const beginString = new SelectionType(index, "^", "beginString", "Begin String").makeToggle();
@@ -40,7 +41,8 @@ const makeSelections = (index) => {
         whitespace,
         notDigit,
         notWord,
-        notWhitespace
+        notWhitespace,
+        customRange
     ]
 
     const areas = document.querySelectorAll(".regexGroupArea");
@@ -81,12 +83,32 @@ const selectionModifier = (e, index) => {
         {value: "*", label: "zero or more", bg: "#cc66ff"}
     ];
 
-    let modifierNumber = e.target.getAttribute("modifierNumber");
-    modifierNumber = Number.parseInt(modifierNumber) + 1;
-    e.target.setAttribute("modifierNumber", modifierNumber)
-    e.target.style.backgroundColor = modifiers[modifierNumber%modifiers.length].bg;
-    e.target.setAttribute("modifierValue", modifiers[modifierNumber%modifiers.length].value);
-    e.target.innerHTML = modifierNumber%modifiers.length > 0?`${e.target.getAttribute("name")}: ${modifiers[modifierNumber%modifiers.length].label}`:`${e.target.getAttribute("name")}`;
+    const name = e.target.getAttribute("name");
+    switch(name) {
+        case "range":
+            const rangeContainers = [...document.querySelectorAll(".customRange.dropped")];
+            rangeContainers.forEach((cont) => {
+                if (Number.parseInt(cont.getAttribute("index")) === index) {
+                    let modifierNumber = cont.getAttribute("modifierNumber");
+                    modifierNumber = Number.parseInt(modifierNumber) + 1;
+                    cont.setAttribute("modifierNumber", modifierNumber);
+                    cont.setAttribute("modifierValue", modifiers[modifierNumber%modifiers.length].value);
+                    $(`.input-group-text[index=${index}]`).css(`background-color`, modifiers[modifierNumber%modifiers.length].bg);
+                    $(`.input-group-text[index=${index}][append]`).html(modifierNumber%modifiers.length > 0?`]: ${modifiers[modifierNumber%modifiers.length].label}`:`]`);
+                    console.log($(`.input-group-text`).html());
+                    console.log($(`.input-group-text[index=${index}]`).html());
+                    console.log($(`.input-group-text[index=${index}][append]`).html());
+                }
+            })            
+        break;
+        default:
+            let modifierNumber = e.target.getAttribute("modifierNumber");
+            modifierNumber = Number.parseInt(modifierNumber) + 1;
+            e.target.setAttribute("modifierNumber", modifierNumber)
+            e.target.style.backgroundColor = modifiers[modifierNumber%modifiers.length].bg;
+            e.target.setAttribute("modifierValue", modifiers[modifierNumber%modifiers.length].value);
+            e.target.innerHTML = modifierNumber%modifiers.length > 0?`${e.target.getAttribute("name")}: ${modifiers[modifierNumber%modifiers.length].label}`:`${e.target.getAttribute("name")}`;
+    }
     updater(index);
 }
 

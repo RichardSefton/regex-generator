@@ -34,6 +34,7 @@ body {
 }
 
 .regexGroupArea {
+    display: inline-block;
     background-color: white;
     width: 100%;
     min-height: 250px;
@@ -50,4 +51,14 @@ body {
 
 .beginString {
     font-size: large;
+}
+
+.customRange {
+    display: flex;
+    font-size: xxx-large;
+    text-align: center;
+}
+
+.customRangeInput {
+    color: black;
 }

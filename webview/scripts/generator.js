@@ -12,8 +12,17 @@ const updateGroup = (group, index) => {
     if (vscode.getState()[`beginString_${index}`]) {builder.push("^")}
     builder.push("(");
     parts.forEach((part) => {
-        builder.push(part.attributes["represents"].value);
-        builder.push(part.attributes["modifierValue"].value);
+        switch(part.attributes["name"].value) {
+            case "range":
+                builder.push("[");
+                builder.push(part.childNodes[1].value);
+                builder.push("]");
+                builder.push(part.attributes["modifierValue"].value);
+            break;
+            default:
+                builder.push(part.attributes["represents"].value);
+                builder.push(part.attributes["modifierValue"].value);
+        }
     });
     builder.push(")");
     if (vscode.getState()[`endString_${index}`]) {builder.push("$")}
