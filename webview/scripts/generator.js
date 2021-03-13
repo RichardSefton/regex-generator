@@ -11,6 +11,7 @@ const updateGroup = (group, index) => {
     const builder = [];
     if (vscode.getState()[`beginString_${index}`]) {builder.push("^")}
     builder.push("(");
+    builder.push(vscode.getState()[`groupPrepend_${index}`]);
     parts.forEach((part) => {
         switch(part.attributes["name"].value) {
             case "range":

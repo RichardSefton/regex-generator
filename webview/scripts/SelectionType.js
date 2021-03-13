@@ -128,7 +128,7 @@ class SelectionType {
         return this.checkboxWrapper;
     }
 
-    makeDropdown(options) {
+    makeDropdown(options, stateValue) {
         const selectFormGroup = document.createElement("div");
         selectFormGroup.classList.add("selectContainer");
         selectFormGroup.classList.add("form-group");
@@ -152,8 +152,8 @@ class SelectionType {
             select.setAttribute("index", `${this.index}`);
             select.appendChild(selectOption);
         });
-        if (vscode.getState()[`selectedGroupModifier_${this.index}`]) {
-            select.value = vscode.getState()[`selectedGroupModifier_${this.index}`];
+        if (vscode.getState()[`${stateValue}_${this.index}`]) {
+            select.value = vscode.getState()[`${stateValue}_${this.index}`];
         }
         selectFormGroup.appendChild(select);
         this.select = selectFormGroup;

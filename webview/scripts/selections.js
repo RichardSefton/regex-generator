@@ -30,13 +30,21 @@ const makeSelections = (index) => {
         {represents: "+", label: "one or more"},
         {represents: "*", label: "zero or more"},
         {represents: "?", label: "zero or one"}
-    ]);
+    ], "selectedGroupModiefier");
+    const groupPrepends = new SelectionType(index, "", "groupPrepend", "Group Prepend").makeDropdown([
+        {represents: "", label: "-None-"},
+        {represents: "?:", label: "non-capturing group"},
+        {represents: "?=", label: "positive lookahead"},
+        {represents: "?!", label: "negative lookahead"}
+    ], "selectedGroupPrepend");
     const groupNumberLimit = new SelectionType(index, "", "groupCharacterLimits", "Group Character Limits").groupNumberLimit();
     $(`.options[index=${index}]`).html("");
     $(`.options[index=${index}]`).append(beginString);
     $(`.options[index=${index}]`).append(endString);
     $(`.options[index=${index}]`).append(groupModifierSelect);
     $(`.options[index=${index}]`).append(groupNumberLimit);
+    $(`.options[index=${index}]`).append(groupPrepends);
+
     setToggles("beginString");
     setToggles("endString");
 
@@ -59,7 +67,8 @@ const makeSelections = (index) => {
     ];
 
     const dropdowns = [
-        groupModifierSelect
+        groupModifierSelect,
+        groupPrepends
     ];
 
     const areas = document.querySelectorAll(".regexGroupArea");
@@ -184,8 +193,17 @@ const dragPlacement = (area, x, y) => {
 };
 
 const changeDropdown = (e, index) => {
-    vscode.setState({...vscode.getState()})[`groupModifier_${index}`] = e.target.value;
-    vscode.setState({...vscode.getState()})[`selectedGroupModifier_${index}`] = e.target.value;
+    switch(e.target.attributes["name"].value) {
+        case "groupModifier":
+            vscode.setState({...vscode.getState()})[`groupModifier_${index}`] = e.target.value;
+            vscode.setState({...vscode.getState()})[`selectedGroupModifier_${index}`] = e.target.value;
+        break;
+        case "groupPrepend":
+            vscode.setState({...vscode.getState()})[`groupPrepend_${index}`] = e.target.value;
+            vscode.setState({...vscode.getState()})[`selectedGroupPrepend_${index}`] = e.target.value;
+        break;
+        default:
+    }
     updater(index);
 };
 
