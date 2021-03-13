@@ -34,27 +34,7 @@ const makeSelections = (index) => {
     setEventListeners(selections, areas, toggles, index)
 }
 
-const setToggles = (className) => {
-    const toggles = [...document.querySelectorAll(`.${className}`)];
-    console.log(toggles);
-    toggles.forEach(toggle => {
-        const index = toggle.getAttribute("index");
-        if (vscode.getState()[`${className}_${index}`]) {
-            toggle.setAttribute("checked", true);
-        }  else {
-            toggle.removeAttribute("checked");
-        }
-    });
-}
-
-const dragStart = (e) => {
-    e.target.classList.add("dragging");
-    e.target = document.querySelector('.dragging');
-}
-
-const dragEnd = (e, index) => {
-    e.target.classList.remove("dragging");
-    e.target.classList.add("dropped");
+const updater = (index) => {
     const groupAreas = [...document.querySelectorAll(".regexGroupArea")];
     const area = groupAreas.filter(ga => ga.getAttribute("index") === `${index}`);
     if (area.length === 1) {
@@ -66,6 +46,48 @@ const dragEnd = (e, index) => {
         const selectionIndex = selection.getAttribute("index");
         makeSelections(selectionIndex);
     });
+}
+
+const setToggles = (className) => {
+    const toggles = [...document.querySelectorAll(`.${className}`)];
+    toggles.forEach(toggle => {
+        const index = toggle.getAttribute("index");
+        if (vscode.getState()[`${className}_${index}`]) {
+            toggle.setAttribute("checked", true);
+        }  else {
+            toggle.removeAttribute("checked");
+        }
+    });
+}
+
+const selectionModifier = (e, index) => {
+    const modifiers = [
+        {value: "", label: "", bg: ""}, 
+        {value: "+", label: "one or more", bg: "orange"}, 
+        {value: "*", label: "zero or more", bg: "#cc66ff"}
+    ];
+
+    let modifierNumber = e.target.getAttribute("modifierNumber");
+    modifierNumber = Number.parseInt(modifierNumber) + 1;
+    e.target.setAttribute("modifierNumber", modifierNumber)
+    e.target.style.backgroundColor = modifiers[modifierNumber%modifiers.length].bg;
+    e.target.setAttribute("modifierValue", modifiers[modifierNumber%modifiers.length].value);
+    e.target.innerHTML = modifierNumber%modifiers.length > 0?`${e.target.getAttribute("name")}: ${modifiers[modifierNumber%modifiers.length].label}`:`${e.target.getAttribute("name")}`;
+    updater(index);
+}
+
+const dragStart = (e) => {
+    e.target.classList.add("dragging");
+    e.target = document.querySelector('.dragging');
+}
+
+const dragEnd = (e, index) => {
+    e.target.classList.remove("dragging");
+    e.target.classList.add("dropped");
+    e.target.addEventListener("click", (event) => {
+        selectionModifier(event, index);
+    })
+    updater(index);
 }
 
 const dragOver = (e, area) => {
