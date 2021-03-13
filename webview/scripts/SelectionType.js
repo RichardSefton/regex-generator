@@ -124,4 +124,37 @@ class SelectionType {
         
         return this.checkboxWrapper;
     }
+
+    makeDropdown(options) {
+        const selectFormGroup = document.createElement("div");
+        selectFormGroup.classList.add("selectContainer");
+        selectFormGroup.classList.add("form-group");
+        selectFormGroup.setAttribute("index", `${this.index}`);
+        selectFormGroup.setAttribute("name", this.name);
+        const selectLabel = document.createElement("label");
+        selectLabel.setAttribute("for", `${this.name}_${this.index}`);
+        selectLabel.innerHTML = this.label;
+        selectLabel.classList.add("selectLabel");
+        selectFormGroup.appendChild(selectLabel);
+        const select = document.createElement("select");
+        select.id = `${this.name}_${this.index}`;
+        select.classList.add("form-control");
+        select.setAttribute("index", `${this.index}`);
+        select.classList.add(`groupSelect`);
+        select.setAttribute("name", this.name);
+        options.forEach(o => {
+            const selectOption = document.createElement("option");
+            selectOption.value = o.represents;
+            selectOption.text = o.label;
+            select.setAttribute("index", `${this.index}`);
+            select.appendChild(selectOption);
+        });
+        if (vscode.getState()[`selectedGroupModifier_${this.index}`]) {
+            console.log(vscode.getState()[`selectedGroupModifier_${this.index}`]);
+            select.value = vscode.getState()[`selectedGroupModifier_${this.index}`];
+        }
+        selectFormGroup.appendChild(select);
+        this.select = selectFormGroup;
+        return this.select; 
+    }
 }

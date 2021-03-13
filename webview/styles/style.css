@@ -16,6 +16,7 @@ body {
 
 .lbl-white {
     color: white;
+    padding: 15px
 }
 
 .group {
@@ -30,7 +31,9 @@ body {
 }
 
 .options {
+    display: grid;
     padding: 15px;
+    grid-template-columns: 1fr 1fr;
 }
 
 .regexGroupArea {
@@ -71,4 +74,16 @@ body {
 
 .numberLimitInput {
     color: black;
+}
+
+.selectContainer{
+    width: 200%;
+}
+
+.selectLabel {
+    color: white;
+}
+
+.groupSelect {
+
 }

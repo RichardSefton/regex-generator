@@ -33,7 +33,7 @@ const updateGroup = (group, index) => {
         }
     });
     builder.push(")");
-
+    builder.push(vscode.getState()[`groupModifier_${index}`]);
     if (vscode.getState()[`endString_${index}`]) {builder.push("$")}
     regex[index] = builder;
 

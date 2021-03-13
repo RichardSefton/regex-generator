@@ -29,6 +29,8 @@
         const state = (i) => {
             vscode.setState({...vscode.getState()})[`beginString_${i}`] = false;
             vscode.setState({...vscode.getState()})[`endString_${i}`] = false;
+            vscode.setState({...vscode.getState()})[`groupModifier_${i}`] = "";
+            vscode.setState({...vscode.getState()})[`selectedGroupModifier_${i}`] = false;
         };
     </script>
 </div>

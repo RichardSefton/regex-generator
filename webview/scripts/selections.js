@@ -25,17 +25,23 @@ const makeSelections = (index) => {
     
     const beginString = new SelectionType(index, "^", "beginString", "Begin String").makeToggle();
     const endString = new SelectionType(index, "$", "endString", "End String").makeToggle();
+    const groupModifierSelect = new SelectionType(index, "", "groupModifier", "Group Modifier").makeDropdown([
+        {represents: "", label: "-None-"},
+        {represents: "+", label: "one or more"},
+        {represents: "*", label: "zero or more"},
+        {represents: "?", label: "zero or one"}
+    ]);
     $(`.options[index=${index}]`).html("");
     $(`.options[index=${index}]`).append(beginString);
     $(`.options[index=${index}]`).append(endString);
-
+    $(`.options[index=${index}]`).append(groupModifierSelect);
     setToggles("beginString");
     setToggles("endString");
 
     const toggles = [
         beginString,
         endString
-    ]
+    ];
 
     const selections = [
         wildcard,
@@ -48,11 +54,15 @@ const makeSelections = (index) => {
         customRange,
         numberLimit,
         orSelection
-    ]
+    ];
+
+    const dropdowns = [
+        groupModifierSelect
+    ];
 
     const areas = document.querySelectorAll(".regexGroupArea");
 
-    setEventListeners(selections, areas, toggles, index)
+    setEventListeners(selections, areas, toggles, dropdowns, index)
 }
 
 const updater = (index) => {
@@ -156,7 +166,7 @@ const toggleChange = (e, index) => {
     if (area.length === 1) {
         updateGroup(area[0], index);
     }
-}
+};
 
 const dragPlacement = (area, x, y) => {
     const draggableElements = [...area.querySelectorAll('[draggable]:not(.dragging)')];
@@ -170,10 +180,16 @@ const dragPlacement = (area, x, y) => {
             return closest;
         }
     }, {yOffset: Number.NEGATIVE_INFINITY, xOffset: Number.NEGATIVE_INFINITY}).element;
-}
+};
 
+const changeDropdown = (e, index) => {
+    vscode.setState({...vscode.getState()})[`groupModifier_${index}`] = e.target.value;
+    vscode.setState({...vscode.getState()})[`selectedGroupModifier_${index}`] = e.target.value;
+    updater(index);
+    console.log(e);
+};
 
-const setEventListeners = (selections, areas, toggles, index) => {
+const setEventListeners = (selections, areas, toggles, dropdowns, index) => {
     selections.forEach((selection) => {
         selection.selection.addEventListener("dragstart", (e) => {
             dragStart(e);
@@ -192,8 +208,14 @@ const setEventListeners = (selections, areas, toggles, index) => {
     toggles.forEach((toggle) => {
         toggle.addEventListener("change", (e) => {
             toggleChange(e, index);
+        });
+    });
+
+    dropdowns.forEach((dropdown) => {
+        dropdown.childNodes[1].addEventListener("change", (e) => {
+            changeDropdown(e, index);
         })
-    })
+    });
 }
 
 // /[A-Z]/.test("SWEFWEFAWEF")
