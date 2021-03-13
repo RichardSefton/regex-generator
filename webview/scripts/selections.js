@@ -9,11 +9,13 @@ const makeSelections = (index) => {
     const notWhitespace = new SelectionType(index, "\\S", "not whitespace");
     const customRange = new SelectionType(index, "", "range");
     const numberLimit = new SelectionType(index, "", "numberLimit");
+    const orSelection = new SelectionType(index, "|", "or");  
 
     $(`.selections[index=${index}]`).html("");
     $(`.selections[index=${index}]`).append(wildcard.makeDraggable());
     $(`.selections[index=${index}]`).append(digit.makeDraggable());
     $(`.selections[index=${index}]`).append(word.makeDraggable());
+    $(`.selections[index=${index}]`).append(orSelection.makeDraggable());
     $(`.selections[index=${index}]`).append(whitespace.makeDraggable());
     $(`.selections[index=${index}]`).append(notDigit.makeDraggable());
     $(`.selections[index=${index}]`).append(notWord.makeDraggable());
@@ -44,7 +46,8 @@ const makeSelections = (index) => {
         notWord,
         notWhitespace,
         customRange,
-        numberLimit
+        numberLimit,
+        orSelection
     ]
 
     const areas = document.querySelectorAll(".regexGroupArea");
@@ -82,7 +85,8 @@ const selectionModifier = (e, index) => {
     const modifiers = [
         {value: "", label: "", bg: ""}, 
         {value: "+", label: "one or more", bg: "orange"}, 
-        {value: "*", label: "zero or more", bg: "#cc66ff"}
+        {value: "*", label: "zero or more", bg: "#cc66ff"},
+        {value: "?", label: "zero or one", bg: "#66ff66"}
     ];
 
     const name = e.target.getAttribute("name");
