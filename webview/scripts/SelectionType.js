@@ -12,6 +12,7 @@ class SelectionType {
         this.selection = document.createElement("div");
         this.selection.setAttribute("draggable", "true");
         this.selection.classList.add("btn");
+        this.selection.classList.add("span1");
         this.selection.setAttribute("represents", this.represents);
         this.selection.setAttribute("modifierNumber", 0);
         this.selection.setAttribute("modifierValue", "");
@@ -27,6 +28,7 @@ class SelectionType {
         this.selection.setAttribute("draggable", "true");
         this.selection.classList.add("customRange");
         this.selection.classList.add("input-group");
+        this.selection.classList.add("span2");
         this.selection.classList.add("btn");
         this.selection.classList.add("col-6");
         this.selection.setAttribute("modifierNumber", 0);
@@ -68,6 +70,7 @@ class SelectionType {
         this.selection.setAttribute("draggable", "true");
         this.selection.classList.add("numberLimit");
         this.selection.classList.add("input-group");
+        this.selection.classList.add("span2");
         this.selection.classList.add("btn");
         this.selection.classList.add("col-6");
         this.selection.setAttribute("name", this.name);
@@ -150,11 +153,60 @@ class SelectionType {
             select.appendChild(selectOption);
         });
         if (vscode.getState()[`selectedGroupModifier_${this.index}`]) {
-            console.log(vscode.getState()[`selectedGroupModifier_${this.index}`]);
             select.value = vscode.getState()[`selectedGroupModifier_${this.index}`];
         }
         selectFormGroup.appendChild(select);
         this.select = selectFormGroup;
         return this.select; 
+    }
+
+    groupNumberLimit() {
+        this.selection = document.createElement("div");
+        this.selection.classList.add("groupNumberLimit");
+        this.selection.classList.add("input-group");
+        this.selection.setAttribute("name", this.name);
+        this.selection.setAttribute("index", `${this.index}`)
+        const groupNumberLimitLabel = document.createElement("label");
+        groupNumberLimitLabel.setAttribute("for", `${this.name}_${this.index}`);
+        groupNumberLimitLabel.innerHTML = this.label;
+        groupNumberLimitLabel.classList.add("limitLabel");
+        this.selection.append(groupNumberLimitLabel);
+        const container = document.createElement("div");
+        container.classList.add("groupNumberLimitContainer");
+        // container.classList.add("input-group");
+        container.setAttribute("index", `${this.index}`);
+        const numberLimitPrepend = document.createElement("div");
+        numberLimitPrepend.classList.add("input-group-prepend");
+        const numberLimitPrependSpan = document.createElement("span");
+        numberLimitPrependSpan.setAttribute("name", `${this.name}`);
+        numberLimitPrependSpan.setAttribute("index", `${this.index}`);
+        numberLimitPrependSpan.classList.add("input-group-text");
+        numberLimitPrependSpan.innerHTML = "{";
+        numberLimitPrepend.append(numberLimitPrependSpan);
+        container.append(numberLimitPrepend);
+        const numberLimitInput = document.createElement("input");
+        numberLimitInput.id = `${this.name}_${this.index}`;
+        numberLimitInput.classList.add("form-control");
+        numberLimitInput.classList.add("col-8");
+        // numberLimitInput.classList.add("input-sm");
+        numberLimitInput.classList.add("groupNumberLimitInput");
+        numberLimitInput.setAttribute("type", "text");
+        numberLimitInput.setAttribute("name", `${this.name}`);
+        numberLimitInput.setAttribute("index", `${this.index}`);
+        if (vscode.getState()[`groupNumberLimit_${this.index}`]) {
+            numberLimitInput.value = vscode.getState()[`groupNumberLimit_${this.index}`];
+        }
+        container.append(numberLimitInput)
+        const numberLimitAppend = document.createElement("div");
+        numberLimitAppend.classList.add("input-group-append");
+        const numberLimitAppendSpan = document.createElement("span");
+        numberLimitAppendSpan.setAttribute("name", `${this.name}`);
+        numberLimitAppendSpan.setAttribute("index", `${this.index}`);
+        numberLimitAppendSpan.classList.add("input-group-text");
+        numberLimitAppendSpan.innerHTML += " }";
+        numberLimitAppend.append(numberLimitAppendSpan);
+        container.append(numberLimitAppend);
+        this.selection.append(container);
+        return this.selection;
     }
 }

@@ -31,10 +31,12 @@ const makeSelections = (index) => {
         {represents: "*", label: "zero or more"},
         {represents: "?", label: "zero or one"}
     ]);
+    const groupNumberLimit = new SelectionType(index, "", "groupCharacterLimits", "Group Character Limits").groupNumberLimit();
     $(`.options[index=${index}]`).html("");
     $(`.options[index=${index}]`).append(beginString);
     $(`.options[index=${index}]`).append(endString);
     $(`.options[index=${index}]`).append(groupModifierSelect);
+    $(`.options[index=${index}]`).append(groupNumberLimit);
     setToggles("beginString");
     setToggles("endString");
 
@@ -62,7 +64,7 @@ const makeSelections = (index) => {
 
     const areas = document.querySelectorAll(".regexGroupArea");
 
-    setEventListeners(selections, areas, toggles, dropdowns, index)
+    setEventListeners(selections, areas, toggles, dropdowns, groupNumberLimit, index)
 }
 
 const updater = (index) => {
@@ -149,7 +151,6 @@ const dragOver = (e, area) => {
     if (classList.includes("regexGroupArea")) {
         area.append(selection);
     } else {
-        // console.log(area);
         const afterElement = dragPlacement(area, e.clientX, e.clientY);
         if (afterElement === undefined) {
             area.append(selection);
@@ -186,10 +187,18 @@ const changeDropdown = (e, index) => {
     vscode.setState({...vscode.getState()})[`groupModifier_${index}`] = e.target.value;
     vscode.setState({...vscode.getState()})[`selectedGroupModifier_${index}`] = e.target.value;
     updater(index);
-    console.log(e);
 };
 
-const setEventListeners = (selections, areas, toggles, dropdowns, index) => {
+const changeNumberLimit = (e, index) => {
+    if (e.target.value === "") {
+        vscode.setState({...vscode.getState()})[`groupNumberLimit_${index}`] = false;
+    } else {
+        vscode.setState({...vscode.getState()})[`groupNumberLimit_${index}`] = e.target.value;
+    }
+    updater(index);
+}
+
+const setEventListeners = (selections, areas, toggles, dropdowns, groupNumberLimit, index) => {
     selections.forEach((selection) => {
         selection.selection.addEventListener("dragstart", (e) => {
             dragStart(e);
@@ -216,6 +225,10 @@ const setEventListeners = (selections, areas, toggles, dropdowns, index) => {
             changeDropdown(e, index);
         })
     });
+
+    groupNumberLimit.childNodes[1].addEventListener("change", (e) => {
+        changeNumberLimit(e, index);
+    })
 }
 
 // /[A-Z]/.test("SWEFWEFAWEF")
