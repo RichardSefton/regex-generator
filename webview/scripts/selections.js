@@ -1,13 +1,23 @@
 // @ts-nocheck
 const makeSelections = (index) => {
-    const digit = new SelectionType(index, "\\d", "digits");
+    const wildcard = new SelectionType(index, ".", "wildcard");
+    const digit = new SelectionType(index, "\\d", "digit");
     const word = new SelectionType(index, "\\w", "word");
     const whitespace = new SelectionType(index, "\\s", "whitespace");
+    const notDigit = new SelectionType(index, "\\D", "not digit");
+    const notWord = new SelectionType(index, "\\W", "not word");
+    const notWhitespace = new SelectionType(index, "\\S", "not whitespace")
 
     $(`.selections[index=${index}]`).html("");
+    $(`.selections[index=${index}]`).append(wildcard.makeDraggable());
     $(`.selections[index=${index}]`).append(digit.makeDraggable());
     $(`.selections[index=${index}]`).append(word.makeDraggable());
     $(`.selections[index=${index}]`).append(whitespace.makeDraggable());
+    $(`.selections[index=${index}]`).append(notDigit.makeDraggable());
+    $(`.selections[index=${index}]`).append(notWord.makeDraggable());
+    $(`.selections[index=${index}]`).append(notWhitespace.makeDraggable());
+
+
     
     const beginString = new SelectionType(index, "^", "beginString", "Begin String").makeToggle();
     const endString = new SelectionType(index, "$", "endString", "End String").makeToggle();
@@ -24,9 +34,13 @@ const makeSelections = (index) => {
     ]
 
     const selections = [
+        wildcard,
         digit, 
         word,
         whitespace,
+        notDigit,
+        notWord,
+        notWhitespace
     ]
 
     const areas = document.querySelectorAll(".regexGroupArea");
