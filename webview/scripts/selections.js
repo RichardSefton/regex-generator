@@ -9,14 +9,18 @@ const makeSelections = (index) => {
     $(`.selections[index=${index}]`).append(word.makeDraggable());
     $(`.selections[index=${index}]`).append(whitespace.makeDraggable());
     
-    const beginString = new SelectionType(index, "^", "beginString", "Begin String").makeToggle(vscode);
+    const beginString = new SelectionType(index, "^", "beginString", "Begin String").makeToggle();
+    const endString = new SelectionType(index, "$", "endString", "End String").makeToggle();
     $(`.options[index=${index}]`).html("");
     $(`.options[index=${index}]`).append(beginString);
+    $(`.options[index=${index}]`).append(endString);
 
     setToggles("beginString");
+    setToggles("endString");
 
     const toggles = [
-        beginString
+        beginString,
+        endString
     ]
 
     const selections = [
@@ -35,9 +39,6 @@ const setToggles = (className) => {
     console.log(toggles);
     toggles.forEach(toggle => {
         const index = toggle.getAttribute("index");
-        console.log(index);
-        console.log(vscode.getState()[`${className}_${index}`]);
-        console.log(typeof vscode.getState()[`${className}_${index}`]);
         if (vscode.getState()[`${className}_${index}`]) {
             toggle.setAttribute("checked", true);
         }  else {
@@ -85,9 +86,7 @@ const dragOver = (e, area) => {
 }
 
 const toggleChange = (e, index) => {
-    console.log(`setting flaf for ${index} to ${e.target.checked}`);
-    vscode.setState({...vscode.getState()})[`beginString_${index}`] = e.target.checked;
-    console.log(vscode.getState());
+    vscode.setState({...vscode.getState()})[`${e.target.id}`] = e.target.checked;
     const groupAreas = [...document.querySelectorAll(".regexGroupArea")];
     const area = groupAreas.filter(ga => ga.getAttribute("index") === `${index}`);
     if (area.length === 1) {

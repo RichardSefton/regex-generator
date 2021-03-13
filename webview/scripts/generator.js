@@ -15,6 +15,7 @@ const updateGroup = (group, index) => {
         builder.push(part.attributes["represents"].value)
     });
     builder.push(")");
+    if (vscode.getState()[`endString_${index}`]) {builder.push("$")}
     regex[index] = builder;
 
     postRegex();

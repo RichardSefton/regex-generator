@@ -28,6 +28,7 @@
 
         const state = (i) => {
             vscode.setState({...vscode.getState()})[`beginString_${i}`] = false;
+            vscode.setState({...vscode.getState()})[`endString_${i}`] = false;
         };
     </script>
 </div>
