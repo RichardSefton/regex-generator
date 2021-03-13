@@ -17,7 +17,7 @@
             initialIndex++;
         });
 
-        const addGroup = (initialIndex) => {
+        const addGroup = () => {
             state(initialIndex);
             const newGroupContainer = makeGroupContainer(initialIndex);
             insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer);
