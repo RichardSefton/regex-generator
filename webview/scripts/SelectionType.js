@@ -14,6 +14,7 @@ class SelectionType {
         this.selection.classList.add("btn");
         this.selection.setAttribute("represents", this.represents);
         this.selection.setAttribute("modifierNumber", 0);
+        this.selection.setAttribute("modifierValue", "");
         this.selection.setAttribute("name", this.name);
         this.selection.setAttribute("index", `${this.index}`);
         this.selection.innerHTML = this.name;
