@@ -109,3 +109,5 @@ const setEventListeners = (selections, areas, toggles, index) => {
         })
     })
 }
+
+// /[A-Z]/.test("SWEFWEFAWEF")
