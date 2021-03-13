@@ -9,7 +9,7 @@
         let index = 0;
         const vscode = acquireVsCodeApi();
         $(() => {
-            state();
+            state(index);
             const newGroupContainer = makeGroupContainer(index);
             insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer)
             makeSelections(index);
@@ -18,7 +18,7 @@
         });
 
         const addGroup = () => {
-            state();
+            state(index);
             const newGroupContainer = makeGroupContainer(index);
             insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer);
             makeSelections(index);
@@ -26,8 +26,8 @@
             index++;
         };
 
-        const state = () => {
-            vscode.setState({...vscode.getState()})[`beginString_${index}`] = false;
+        const state = (i) => {
+            vscode.setState({...vscode.getState()})[`beginString_${i}`] = false;
         };
     </script>
 </div>

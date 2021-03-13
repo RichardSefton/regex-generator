@@ -26,12 +26,11 @@ class SelectionType {
         this.checkboxWrapper.setAttribute("index", `${this.index}`);
 
         this.checkbox = document.createElement("input");
+        this.checkbox.id = `${this.name}_${this.index}`;
+        this.checkbox.classList.add(this.name);
         this.checkbox.setAttribute("type", "checkbox");
-        this.checkbox.setAttribute(this.name, this.beginString);
+        this.checkbox.setAttribute("represents", this.represents);
         this.checkbox.setAttribute("index", `${this.index}`);
-        if (vscode.getState()[`beginString_${this.index}`]) {
-            this.checkbox.setAttribute("checked", "true");
-        };
         
         this.checkboxLabel = document.createElement("label");
         this.checkboxLabel.classList.add("lbl-white");
