@@ -8,6 +8,7 @@ const makeSelections = (index) => {
     const notWord = new SelectionType(index, "\\W", "not word");
     const notWhitespace = new SelectionType(index, "\\S", "not whitespace");
     const customRange = new SelectionType(index, "", "range");
+    const numberLimit = new SelectionType(index, "", "numberLimit");
 
     $(`.selections[index=${index}]`).html("");
     $(`.selections[index=${index}]`).append(wildcard.makeDraggable());
@@ -18,7 +19,7 @@ const makeSelections = (index) => {
     $(`.selections[index=${index}]`).append(notWord.makeDraggable());
     $(`.selections[index=${index}]`).append(notWhitespace.makeDraggable());
     $(`.selections[index=${index}]`).append(customRange.makeCustomRange());
-
+    $(`.selections[index=${index}]`).append(numberLimit.makeNumberLimits());
     
     const beginString = new SelectionType(index, "^", "beginString", "Begin String").makeToggle();
     const endString = new SelectionType(index, "$", "endString", "End String").makeToggle();
@@ -42,7 +43,8 @@ const makeSelections = (index) => {
         notDigit,
         notWord,
         notWhitespace,
-        customRange
+        customRange,
+        numberLimit
     ]
 
     const areas = document.querySelectorAll(".regexGroupArea");
@@ -88,18 +90,18 @@ const selectionModifier = (e, index) => {
         case "range":
             const rangeContainers = [...document.querySelectorAll(".customRange.dropped")];
             rangeContainers.forEach((cont) => {
-                if (Number.parseInt(cont.getAttribute("index")) === index) {
+                if (Number.parseInt(cont.getAttribute("index")) === Number.parseInt(index)) {
                     let modifierNumber = cont.getAttribute("modifierNumber");
                     modifierNumber = Number.parseInt(modifierNumber) + 1;
                     cont.setAttribute("modifierNumber", modifierNumber);
                     cont.setAttribute("modifierValue", modifiers[modifierNumber%modifiers.length].value);
-                    $(`.input-group-text[index=${index}]`).css(`background-color`, modifiers[modifierNumber%modifiers.length].bg);
-                    $(`.input-group-text[index=${index}][append]`).html(modifierNumber%modifiers.length > 0?`]: ${modifiers[modifierNumber%modifiers.length].label}`:`]`);
-                    console.log($(`.input-group-text`).html());
-                    console.log($(`.input-group-text[index=${index}]`).html());
-                    console.log($(`.input-group-text[index=${index}][append]`).html());
+                    $(`.input-group-text[index=${index}][name=range]`).css(`background-color`, modifiers[modifierNumber%modifiers.length].bg);
+                    $(`.input-group-text[index=${index}][name=range][append]`).html(modifierNumber%modifiers.length > 0?`]: ${modifiers[modifierNumber%modifiers.length].label}`:`]`);
                 }
             })            
+        break;
+        case "numberLimit":
+            //do nothing. We don't want modifiers following number limits
         break;
         default:
             let modifierNumber = e.target.getAttribute("modifierNumber");

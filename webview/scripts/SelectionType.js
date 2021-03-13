@@ -63,6 +63,45 @@ class SelectionType {
         return this.selection;
     }
 
+    makeNumberLimits() {
+        this.selection = document.createElement("div");
+        this.selection.setAttribute("draggable", "true");
+        this.selection.classList.add("numberLimit");
+        this.selection.classList.add("input-group");
+        this.selection.classList.add("btn");
+        this.selection.classList.add("col-6");
+        this.selection.setAttribute("name", this.name);
+        this.selection.setAttribute("index", `${this.index}`)
+        const numberLimitPrepend = document.createElement("div");
+        numberLimitPrepend.classList.add("input-group-prepend");
+        const numberLimitPrependSpan = document.createElement("span");
+        numberLimitPrependSpan.setAttribute("name", `${this.name}`);
+        numberLimitPrependSpan.setAttribute("index", `${this.index}`);
+        numberLimitPrependSpan.classList.add("input-group-text");
+        numberLimitPrependSpan.innerHTML = "{";
+        numberLimitPrepend.append(numberLimitPrependSpan);
+        this.selection.append(numberLimitPrepend);
+        const numberLimitInput = document.createElement("input");
+        numberLimitInput.classList.add("form-control");
+        numberLimitInput.classList.add("input-sm");
+        numberLimitInput.classList.add("numberLimitInput");
+        numberLimitInput.setAttribute("type", "text");
+        numberLimitInput.setAttribute("name", `${this.name}`);
+        numberLimitInput.setAttribute("index", `${this.index}`)
+        this.selection.append(numberLimitInput)
+        const numberLimitAppend = document.createElement("div");
+        numberLimitAppend.classList.add("input-group-append");
+        const numberLimitAppendSpan = document.createElement("span");
+        numberLimitAppendSpan.setAttribute("name", `${this.name}`);
+        numberLimitAppendSpan.setAttribute("index", `${this.index}`);
+        numberLimitAppendSpan.setAttribute("append", true);
+        numberLimitAppendSpan.classList.add("input-group-text");
+        numberLimitAppendSpan.innerHTML += " }";
+        numberLimitAppend.append(numberLimitAppendSpan);
+        this.selection.append(numberLimitAppend);
+        return this.selection;
+    }
+
     makeToggle() {
         this.checkboxWrapper = document.createElement("div");
         this.checkboxWrapper.classList.add("form-group");

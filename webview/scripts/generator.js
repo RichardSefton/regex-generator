@@ -19,12 +19,21 @@ const updateGroup = (group, index) => {
                 builder.push("]");
                 builder.push(part.attributes["modifierValue"].value);
             break;
+            case "numberLimit":
+                if (builder[builder.length-1] === "+" || builder[builder.length-1] === "*") {
+                    builder[builder.length-1] = "";
+                }
+                builder.push("{") 
+                builder.push(part.childNodes[1].value);
+                builder.push("}")
+            break;
             default:
                 builder.push(part.attributes["represents"].value);
                 builder.push(part.attributes["modifierValue"].value);
         }
     });
     builder.push(")");
+
     if (vscode.getState()[`endString_${index}`]) {builder.push("$")}
     regex[index] = builder;
 

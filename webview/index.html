@@ -6,24 +6,24 @@
     <button class="btn-primary btn" onclick="addGroup()">Add group</button>
 
     <script>
-        let index = 0;
+        let initialIndex = 0;
         const vscode = acquireVsCodeApi();
         $(() => {
-            state(index);
-            const newGroupContainer = makeGroupContainer(index);
+            state(initialIndex);
+            const newGroupContainer = makeGroupContainer(initialIndex);
             insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer)
-            makeSelections(index);
+            makeSelections(initialIndex);
             newGroup();
-            index++;
+            initialIndex++;
         });
 
-        const addGroup = () => {
-            state(index);
-            const newGroupContainer = makeGroupContainer(index);
+        const addGroup = (initialIndex) => {
+            state(initialIndex);
+            const newGroupContainer = makeGroupContainer(initialIndex);
             insertNewGroupContainer(document.getElementById("mainContainer"), newGroupContainer);
-            makeSelections(index);
+            makeSelections(initialIndex);
             newGroup();
-            index++;
+            initialIndex++;
         };
 
         const state = (i) => {

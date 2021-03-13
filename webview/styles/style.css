@@ -62,3 +62,13 @@ body {
 .customRangeInput {
     color: black;
 }
+
+.numberLimit {
+    display: flex;
+    font-size: xxx-large;
+    text-align: center;
+}
+
+.numberLimitInput {
+    color: black;
+}
